@@ -1,6 +1,8 @@
 import { AdminDashboard } from "@/components/admin-dashboard";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage() {
   const games = await prisma.game.findMany({
     orderBy: { name: "asc" },
