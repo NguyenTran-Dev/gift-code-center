@@ -2,16 +2,16 @@ version: "3.8"
 
 services:
   db:
-    image: mysql:8.0
-    container_name: giftcode_mysql
-    restart: always
+    image: mysql8.0
+    container_name: ${MYSQL_CONTAINER_NAME}
+    restart: ${RESTART_POLICY:-always}
     environment:
-      MYSQL_DATABASE: giftcode_db
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user_password
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3339:3306"
+      - "${MYSQL_PORT:-3339}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
