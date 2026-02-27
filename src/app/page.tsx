@@ -4,6 +4,8 @@ import { SearchFilter } from "@/components/search-filter";
 import { prisma } from "@/lib/prisma";
 import { Gamepad2 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home({
   searchParams,
 }: {
@@ -33,19 +35,29 @@ export default async function Home({
     },
   });
 
-  const categories = ["Tất cả", "RPG", "FPS", "MMORPG", "Racing", "Battle Royale", "Strategy"];
+  const categories = [
+    "Tất cả",
+    "RPG",
+    "FPS",
+    "MMORPG",
+    "Racing",
+    "Battle Royale",
+    "Strategy",
+  ];
 
   return (
     <div className="flex min-h-screen flex-col bg-[#0a0a0a]">
       <Header />
-      
+
       <main className="container mx-auto flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <section className="mb-12">
           <div className="flex flex-col gap-2 mb-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl italic uppercase">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white italic uppercase">
               Danh sách <span className="text-cyan-400">Game</span>
             </h1>
-            <p className="text-gray-400 text-lg">Chọn game để xem và nhận giftcode miễn phí</p>
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg">
+              Chọn game để xem và nhận giftcode miễn phí
+            </p>
           </div>
 
           <SearchFilter categories={categories} activeCategory={category} />
@@ -61,8 +73,12 @@ export default async function Home({
               <div className="mb-4 rounded-full bg-white/5 p-6">
                 <Gamepad2 className="h-12 w-12 text-gray-600" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Không tìm thấy game</h3>
-              <p className="text-gray-400 max-w-xs">Thử tìm kiếm với từ khóa khác hoặc quay lại sau.</p>
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
+                Không tìm thấy game
+              </h3>
+              <p className="text-gray-400 max-w-xs text-sm sm:text-base">
+                Thử tìm kiếm với từ khóa khác hoặc quay lại sau.
+              </p>
             </div>
           )}
         </section>
