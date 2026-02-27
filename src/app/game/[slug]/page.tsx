@@ -4,6 +4,7 @@ import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "@/lib/seo";
 import { Giftcode } from "@prisma/client";
 import { ChevronLeft, Gift, Info, Share2 } from "lucide-react";
 import { Metadata } from "next";
@@ -23,11 +24,41 @@ export async function generateMetadata({
     where: { slug },
   });
 
-  if (!game) return { title: "Game not found" };
+  const baseUrl = getBaseUrl();
+  const canonicalUrl = `${baseUrl}/game/${slug}`;
+
+  if (!game) {
+    return {
+      title: "Game not found",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
 
   return {
+    metadataBase: new URL(baseUrl),
     title: `${game.name} Giftcode mới nhất | Giftcode Center`,
     description: `Danh sách toàn bộ giftcode mới nhất cho game ${game.name}. Cập nhật liên tục.`,
+    alternates: {
+      canonical: `/game/${game.slug}`,
+    },
+    openGraph: {
+      title: `${game.name} Giftcode mới nhất | Giftcode Center`,
+      description: `Danh sách toàn bộ giftcode mới nhất cho game ${game.name}. Cập nhật liên tục.`,
+      url: canonicalUrl,
+      siteName: "Giftcode Center",
+      locale: "vi_VN",
+      type: "website",
+      images: game.thumbnail ? [game.thumbnail] : ["/favicon.png"],
+    },
+    twitter: {
+      card: game.thumbnail ? "summary_large_image" : "summary",
+      title: `${game.name} Giftcode mới nhất | Giftcode Center`,
+      description: `Danh sách toàn bộ giftcode mới nhất cho game ${game.name}. Cập nhật liên tục.`,
+      images: game.thumbnail ? [game.thumbnail] : ["/favicon.png"],
+    },
   };
 }
 
@@ -51,9 +82,54 @@ export default async function GameDetail({
     notFound();
   }
 
+  const baseUrl = getBaseUrl();
+  const canonicalUrl = `${baseUrl}/game/${game.slug}`;
+  const gameLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    name: game.name,
+    description:
+      game.description ||
+      `Danh sach giftcode moi nhat cho game ${game.name}. Cap nhat lien tuc.`,
+    genre: game.category,
+    url: canonicalUrl,
+  };
+
+  if (game.thumbnail) {
+    gameLd.image = [game.thumbnail];
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Trang chu",
+        item: `${baseUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: game.name,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-[#0a0a0a]">
       <Header />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(gameLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
 
       <main className="container mx-auto flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <Link

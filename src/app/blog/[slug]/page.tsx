@@ -1,6 +1,7 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "@/lib/seo";
 import { format } from "date-fns";
 import { Calendar, ChevronLeft, User } from "lucide-react";
 import { Metadata } from "next";
@@ -21,19 +22,51 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await prisma.post.findUnique({
     where: { slug },
+    include: {
+      author: {
+        select: { username: true },
+      },
+    },
   });
 
-  if (!post) return { title: "Blog not found" };
+  const baseUrl = getBaseUrl();
+  const canonicalUrl = `${baseUrl}/blog/${slug}`;
+
+  if (!post || (!post.published && process.env.NODE_ENV === "production")) {
+    return {
+      title: "Blog not found",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
 
   return {
+    metadataBase: new URL(baseUrl),
     title: post.metaTitle || `${post.title} | Giftcode Center`,
     description: post.metaDescription || post.excerpt || post.title,
     keywords: post.keywords || "giftcode, game, blog game, thu thuat game",
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.metaDescription || post.excerpt || post.title,
-      images: post.thumbnail ? [post.thumbnail] : [],
+      url: canonicalUrl,
+      siteName: "Giftcode Center",
+      locale: "vi_VN",
       type: "article",
+      publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
+      authors: [post.author?.username || "Giftcode Center"],
+      images: post.thumbnail ? [post.thumbnail] : ["/favicon.png"],
+    },
+    twitter: {
+      card: post.thumbnail ? "summary_large_image" : "summary",
+      title: post.title,
+      description: post.metaDescription || post.excerpt || post.title,
+      images: post.thumbnail ? [post.thumbnail] : ["/favicon.png"],
     },
   };
 }
@@ -82,9 +115,72 @@ export default async function BlogPostPage({
     },
   });
 
+  const baseUrl = getBaseUrl();
+  const canonicalUrl = `${baseUrl}/blog/${post.slug}`;
+  const blogPostingLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.metaDescription || post.excerpt || post.title,
+    author: {
+      "@type": "Person",
+      name: post.author.username,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Giftcode Center",
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/favicon.png`,
+      },
+    },
+    datePublished: post.createdAt.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    mainEntityOfPage: canonicalUrl,
+    url: canonicalUrl,
+  };
+
+  if (post.thumbnail) {
+    blogPostingLd.image = [post.thumbnail];
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Trang chu",
+        item: `${baseUrl}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: `${baseUrl}/blog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-[#0a0a0a]">
       <Header />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
 
       <main className="container mx-auto flex-1 px-4 py-8 sm:px-6 lg:max-w-4xl">
         <Link

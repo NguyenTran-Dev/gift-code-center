@@ -1,6 +1,7 @@
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "@/lib/seo";
 import { format } from "date-fns";
 import { Calendar, User } from "lucide-react";
 import { Metadata } from "next";
@@ -9,10 +10,33 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
+const baseUrl = getBaseUrl();
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "Blog Giftcode & Thủ Thuật Game | Giftcode Center",
   description:
     "Chia sẻ kinh nghiệm, thủ thuật và danh sách giftcode mới nhất cho cộng đồng game thủ.",
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: "Blog Giftcode & Thủ Thuật Game | Giftcode Center",
+    description:
+      "Chia sẻ kinh nghiệm, thủ thuật và danh sách giftcode mới nhất cho cộng đồng game thủ.",
+    url: "/blog",
+    siteName: "Giftcode Center",
+    locale: "vi_VN",
+    type: "website",
+    images: ["/favicon.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog Giftcode & Thủ Thuật Game | Giftcode Center",
+    description:
+      "Chia sẻ kinh nghiệm, thủ thuật và danh sách giftcode mới nhất cho cộng đồng game thủ.",
+    images: ["/favicon.png"],
+  },
 };
 
 export default async function BlogPage() {
