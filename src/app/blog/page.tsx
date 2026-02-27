@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
@@ -96,23 +97,7 @@ export default async function BlogPage() {
         </section>
       </main>
 
-      <footer className="border-t border-white/5 bg-black/50 py-12">
-        <div className="container mx-auto px-4 text-center space-y-3">
-          <p className="text-gray-500 text-sm">
-            © 2026 GIFTCODE CENTER. All rights reserved.
-          </p>
-          <div className="flex items-center justify-center gap-2 text-gray-600 text-xs">
-            <span>Website thuộc bản quyền của</span>
-            <Image
-              src="/favicon.png"
-              alt="N2K Logo"
-              width={60}
-              height={25}
-              className="inline-block"
-            />
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

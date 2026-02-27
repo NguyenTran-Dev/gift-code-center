@@ -1,10 +1,10 @@
 import { GameCard } from "@/components/game-card";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { SearchFilter } from "@/components/search-filter";
 import { prisma } from "@/lib/prisma";
 import { GAME_CATEGORIES } from "@/lib/constants";
 import { Gamepad2 } from "lucide-react";
-import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -98,27 +98,7 @@ export default async function Home({
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-xl py-8 sm:py-12 mt-8 sm:mt-12">
-        <div className="container mx-auto px-4 text-center space-y-3 sm:space-y-4">
-          <p className="text-gray-500 text-xs sm:text-sm">
-            © 2026 GIFTCODE CENTER. All rights reserved.
-          </p>
-          <div className="flex items-center justify-center gap-2 text-gray-600 text-[10px] sm:text-xs">
-            <span>Website thuộc bản quyền của</span>
-            <div className="relative group">
-              <div className="absolute -inset-2 bg-cyan-500/20 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
-              <Image
-                src="/favicon.png"
-                alt="N2K Logo"
-                width={60}
-                height={25}
-                className="inline-block relative transition-transform group-hover:scale-110"
-              />
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
