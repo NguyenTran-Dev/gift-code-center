@@ -2,6 +2,7 @@ import { GameCard } from "@/components/game-card";
 import { Header } from "@/components/header";
 import { SearchFilter } from "@/components/search-filter";
 import { prisma } from "@/lib/prisma";
+import { GAME_CATEGORIES } from "@/lib/constants";
 import { Gamepad2 } from "lucide-react";
 import Image from "next/image";
 
@@ -36,69 +37,85 @@ export default async function Home({
     },
   });
 
-  const categories = [
-    "Tất cả",
-    "RPG",
-    "FPS",
-    "MMORPG",
-    "Racing",
-    "Battle Royale",
-    "Strategy",
-  ];
-
   return (
     <div className="flex min-h-screen flex-col bg-[#0a0a0a]">
       <Header />
 
-      <main className="container mx-auto flex-1 px-4 py-8 sm:px-6 lg:px-8">
-        <section className="mb-12">
-          <div className="flex flex-col gap-2 mb-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white italic uppercase">
-              Danh sách <span className="text-cyan-400">Game</span>
-            </h1>
-            <p className="text-gray-400 text-sm sm:text-base md:text-lg">
-              Chọn game để xem và nhận giftcode miễn phí
+      <main className="container mx-auto flex-1 px-4 py-6 sm:py-8 sm:px-6 lg:px-8 max-w-[1600px]">
+        <section>
+          {/* Hero Title Section */}
+          <div className="flex flex-col gap-2 sm:gap-3 mb-6 sm:mb-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
+            <div className="relative inline-block">
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-2xl blur-2xl opacity-20 animate-pulse" />
+              <h1 className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-white italic uppercase leading-tight">
+                Danh sách{" "}
+                <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
+                  Game
+                </span>
+              </h1>
+            </div>
+            <p className="text-gray-400 text-xs sm:text-sm md:text-base lg:text-lg">
+              Khám phá hàng trăm game hot và nhận giftcode miễn phí mỗi ngày 🎮
             </p>
           </div>
 
-          <SearchFilter categories={categories} activeCategory={category} />
+          {/* Search & Filter Section */}
+          <SearchFilter
+            categories={GAME_CATEGORIES}
+            activeCategory={category}
+          />
 
+          {/* Games Grid */}
           {games.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
-              {games.map((game) => (
-                <GameCard key={game.id} game={game} />
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
+              {games.map((game, index) => (
+                <div
+                  key={game.id}
+                  className="animate-in fade-in slide-in-from-bottom-4"
+                  style={{
+                    animationDelay: `${index * 50}ms`,
+                    animationFillMode: "backwards",
+                  }}
+                >
+                  <GameCard game={game} />
+                </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="mb-4 rounded-full bg-white/5 p-6">
-                <Gamepad2 className="h-12 w-12 text-gray-600" />
+            <div className="flex flex-col items-center justify-center py-16 sm:py-20 text-center animate-in fade-in zoom-in duration-500">
+              <div className="mb-4 sm:mb-6 rounded-full bg-gradient-to-br from-white/5 to-white/10 p-6 sm:p-8 backdrop-blur-sm border border-white/10">
+                <Gamepad2 className="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 text-gray-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
+              <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-2">
                 Không tìm thấy game
               </h3>
-              <p className="text-gray-400 max-w-xs text-sm sm:text-base">
-                Thử tìm kiếm với từ khóa khác hoặc quay lại sau.
+              <p className="text-gray-400 max-w-md text-xs sm:text-sm md:text-base px-4">
+                Thử tìm kiếm với từ khóa khác hoặc chọn thể loại khác phù hợp
+                với bạn.
               </p>
             </div>
           )}
         </section>
       </main>
 
-      <footer className="border-t border-white/5 bg-black/50 py-12">
-        <div className="container mx-auto px-4 text-center space-y-3">
-          <p className="text-gray-500 text-sm">
+      {/* Footer */}
+      <footer className="border-t border-white/5 bg-gradient-to-t from-black/80 to-transparent backdrop-blur-xl py-8 sm:py-12 mt-8 sm:mt-12">
+        <div className="container mx-auto px-4 text-center space-y-3 sm:space-y-4">
+          <p className="text-gray-500 text-xs sm:text-sm">
             © 2026 GIFTCODE CENTER. All rights reserved.
           </p>
-          <div className="flex items-center justify-center gap-2 text-gray-600 text-xs">
+          <div className="flex items-center justify-center gap-2 text-gray-600 text-[10px] sm:text-xs">
             <span>Website thuộc bản quyền của</span>
-            <Image
-              src="/favicon.png"
-              alt="N2K Logo"
-              width={60}
-              height={25}
-              className="inline-block"
-            />
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-cyan-500/20 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Image
+                src="/favicon.png"
+                alt="N2K Logo"
+                width={60}
+                height={25}
+                className="inline-block relative transition-transform group-hover:scale-110"
+              />
+            </div>
           </div>
         </div>
       </footer>
