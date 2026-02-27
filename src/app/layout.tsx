@@ -15,7 +15,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Giftcode Center - Tổng hợp giftcode game mới nhất",
-  description: "Trang web tổng hợp giftcode cho từng game. Cập nhật liên tục, copy nhanh chóng.",
+  description:
+    "Trang web tổng hợp giftcode cho từng game. Cập nhật liên tục, copy nhanh chóng.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -24,13 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className="dark" style={{ colorScheme: 'dark' }}>
+    <html lang="vi" className="dark" style={{ colorScheme: "dark" }}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0a] text-foreground min-h-screen`}
       >
-        <div className="relative flex min-h-screen flex-col">
-          {children}
-        </div>
+        <div className="relative flex min-h-screen flex-col">{children}</div>
         <Toaster position="top-center" richColors />
       </body>
     </html>
