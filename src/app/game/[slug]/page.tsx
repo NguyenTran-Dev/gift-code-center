@@ -1,12 +1,12 @@
 import { GiftcodeCard } from "@/components/giftcode-card";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { getBaseUrl } from "@/lib/seo";
 import { Giftcode } from "@prisma/client";
-import { ChevronLeft, Gift, Info, Share2 } from "lucide-react";
+import { ChevronLeft, Gift, Info } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -182,17 +182,14 @@ export default async function GameDetail({
               </p>
 
               <div className="flex flex-wrap items-center justify-center gap-4 md:justify-start">
-                <Button className="bg-cyan-600 hover:bg-cyan-500 text-white gap-2 rounded-xl h-10 sm:h-12 px-6 sm:px-8 font-bold text-xs sm:text-sm md:text-base">
-                  <Gift className="h-4 w-4 sm:h-5 sm:w-5" />
-                  NHẬN CODE NGAY
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-white/10 text-white hover:bg-white/5 gap-2 rounded-xl h-10 sm:h-12 px-6 sm:px-8 text-xs sm:text-sm md:text-base"
-                >
-                  <Share2 className="h-4 w-4 sm:h-5 sm:w-5" />
-                  Chia sẻ
-                </Button>
+                <ShareButton
+                  title={`${game.name} Giftcode mới nhất | Giftcode Center`}
+                  description={
+                    game.description ||
+                    `Danh sách toàn bộ giftcode mới nhất cho game ${game.name}.`
+                  }
+                  url={canonicalUrl}
+                />
               </div>
             </div>
           </div>
