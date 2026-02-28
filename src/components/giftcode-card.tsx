@@ -41,20 +41,21 @@ export function GiftcodeCard({ giftcode }: GiftcodeCardProps) {
           </div>
 
           <div className="flex items-center gap-4 text-[10px] sm:text-xs">
-            {giftcode.expiryDate && (
+            {giftcode.expiryDate ? (
               <div className="flex items-center gap-1.5 text-orange-400">
                 <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 <span>
                   Hết hạn: {format(new Date(giftcode.expiryDate), "dd/MM/yyyy")}
                 </span>
               </div>
+            ) : (
+              <Badge
+                variant="outline"
+                className="border-cyan-500/30 text-cyan-400 text-[10px] sm:text-xs uppercase tracking-wider"
+              >
+                Vĩnh viễn
+              </Badge>
             )}
-            <Badge
-              variant="outline"
-              className="border-cyan-500/30 text-cyan-400 text-[10px] sm:text-xs"
-            >
-              Đang hoạt động
-            </Badge>
           </div>
         </div>
 

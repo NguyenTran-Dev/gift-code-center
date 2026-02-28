@@ -1,4 +1,4 @@
-import { GiftcodeCard } from "@/components/giftcode-card";
+import { GiftcodeFilterList } from "@/components/giftcode-filter-list";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ShareButton } from "@/components/share-button";
@@ -141,10 +141,12 @@ export default async function GameDetail({
         </Link>
 
         {/* Game Hero */}
-        <section className="relative mb-12 overflow-hidden rounded-3xl border border-white/10 bg-[#121212]">
-          <div className="absolute inset-0 opacity-20 blur-3xl saturate-200">
-            <div className="absolute top-0 right-0 h-64 w-64 bg-cyan-500 rounded-full" />
-            <div className="absolute bottom-0 left-0 h-64 w-64 bg-purple-500 rounded-full" />
+        <section className="relative mb-12 rounded-3xl border border-white/10 bg-[#121212]">
+          <div className="absolute inset-0 overflow-hidden rounded-[22px] pointer-events-none">
+            <div className="absolute inset-0 opacity-20 blur-3xl saturate-200">
+              <div className="absolute top-0 right-0 h-64 w-64 bg-cyan-500 rounded-full" />
+              <div className="absolute bottom-0 left-0 h-64 w-64 bg-purple-500 rounded-full" />
+            </div>
           </div>
 
           <div className="relative flex flex-col items-center gap-8 p-8 md:flex-row md:p-12">
@@ -206,23 +208,7 @@ export default async function GameDetail({
             </h2>
           </div>
 
-          {game.giftcodes.length > 0 ? (
-            <div className="grid gap-6">
-              {game.giftcodes.map((gc: Giftcode) => (
-                <GiftcodeCard key={gc.id} giftcode={gc} />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-3xl border border-dashed border-white/10 p-12 text-center bg-white/5">
-              <Info className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-              <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-                Chưa có giftcode nào
-              </h3>
-              <p className="text-gray-400 text-sm sm:text-base">
-                Chúng tôi đang cập nhật giftcode cho game này. Quay lại sau nhé!
-              </p>
-            </div>
-          )}
+          <GiftcodeFilterList giftcodes={game.giftcodes} />
         </section>
       </main>
 
